@@ -13,7 +13,7 @@ if [[ -z "$GITLAB_SSH_KEY" ]]; then
     exit 1
   fi
   
-  export GITLAB_SSH_KEY=$(curl -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/kv-gitlab/data/pl.rachuna-net | jq -r .data.data.GITLAB_SSH_KEY)
+  export GITLAB_SSH_KEY=$(curl -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/kv-gitlab/data/pl.rachuna-net/auth/gitlab | jq -r .data.data.GITLAB_SSH_KEY)
 fi
 
 mkdir -p /home/ansible/.ssh
