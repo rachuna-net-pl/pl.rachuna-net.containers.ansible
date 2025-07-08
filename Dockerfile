@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       sudo \
     && rm -rf /var/lib/apt/lists/* \
 
-# Upgrade pip and install Python packages in one command to reduce layers
+    # Upgrade pip and install Python packages in one command to reduce layers
     && pip3 install --no-cache-dir --break-system-packages --ignore-installed \
         ansible \
         ansible-core \
@@ -42,18 +42,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         requests \
         testinfra \
 
-# Install ansible galaxy collections
+    # Install ansible galaxy collections
     && ansible-galaxy collection install community.general:==7.2.0 \
         --collections-path /usr/local/lib/python3.10/dist-packages/ansible_collections \
         --force \
 
-# Make scripts executable
+    # Make scripts executable
     && chmod +x /opt/scripts/*.bash \
 
-# Create a non-root user and set permissions
-    && useradd -m -s /bin/bash ansible \
-    && chown -R ansible:ansible /opt/scripts
+    # Create a non-root user and set permissions
+    && useradd -m -s /bin/bash nonroot \
+    && chown -R nonroot:nonroot /opt/scripts
 
-USER ansible
+USER nonroot
 
 ENTRYPOINT [ "/opt/scripts/entrypoint.bash" ]

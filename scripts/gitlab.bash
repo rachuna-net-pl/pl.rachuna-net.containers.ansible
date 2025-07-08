@@ -14,14 +14,16 @@ if [[ -z "$GITLAB_SSH_KEY" ]]; then
   fi
   
   export GITLAB_SSH_KEY=$(curl -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/kv-gitlab/data/pl.rachuna-net/auth/gitlab | jq -r .data.data.GITLAB_SSH_KEY)
+  export GITLAB_TOKEN=$(curl -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/kv-gitlab/data/pl.rachuna-net/auth/gitlab | jq -r .data.data.GITLAB_TOKEN)
+  echo "🔑 Pobrano sekrety z Vaulta"
 fi
 
-mkdir -p /home/ansible/.ssh
-chmod 700 /home/ansible/.ssh
-echo "$GITLAB_SSH_KEY" > /home/ansible/.ssh/id_rsa
-chmod 600 /home/ansible/.ssh/id_rsa
+mkdir -p $HOME/.ssh
+chmod 700 $HOME/.ssh
+echo "$GITLAB_SSH_KEY" > $HOME/.ssh/id_rsa
+chmod 600 $HOME/.ssh/id_rsa
 
-echo "Host gitlab.com IdentityFile /home/ansible/.ssh/id_rsa StrictHostKeyChecking no" > /home/ansible/.ssh/config
-ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+echo "Host gitlab.com IdentityFile $HOME/.ssh/id_rsa StrictHostKeyChecking no" > $HOME/.ssh/config
+ssh-keyscan gitlab.com >> $HOME/.ssh/known_hosts
 
 echo "✅ Klucze SSH zostały pomyślnie skonfigurowane."
